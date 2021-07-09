@@ -1,0 +1,26 @@
+This file loads memory beginning at address 0x300.  Addresses 0x300 through 0x32C contain the numbers 1 through 11.  This is like an array of int.  Addresses 330 through 360 contain a program that computes the sum of the numbers in the array.
+300
+300 0x1
+304 0x2
+308 0x3
+312 0x4
+316 0x5
+320 0x6
+324 0x7
+328 0x8
+332 0x9
+336 0xA
+340 0xB
+344 0x02000300 //LDI R0,300   // R0 has address of array element to get goes from 300 to 324
+348 0x02010000 LDI R1,0     // R1 accumulates the sum
+352 0x02030004 LDI R3,4     // R3 is added to R0 on each iteration
+356 0x0204000A LDI R4,10    // R4 is number of elements to add, when R4 is 0, loop terminates
+360 0x02050001 LDI R5,1     // R5 is subtracted from R4 on each iteration
+364 0x02060000 LDI R6,0     // R6 is termination number - CMP R4 to R6 on each iteration
+368 0x03020000 LDX R2,[R0]  // R2 holds an element of the array
+372 0x05010201 ADD R1,R2,R1 // Add to the accumulator the array element
+376 0x05000300 ADD R0,R3,R0 // Add 4 to the register pointing to array - advance to next element
+380 0x06040405 SUB R4,R4,R5 // Subtract 1 from number of elements left to add
+384 0x09000406 CMP R4,R6    // CMP num of elements remaining to 0
+388 0x0C000348 BNE 338      // Branch NE to get next element of array
+392 0x0A000392 B   360      // Jump to yourself in a tight loop
